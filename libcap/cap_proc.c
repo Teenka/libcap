@@ -4,6 +4,7 @@
  * This file deals with getting and setting capabilities on processes.
  */
 
+#include <stdio.h>
 #include <sys/prctl.h>
 
 #include "libcap.h"
