@@ -5,10 +5,50 @@
  */
 
 #include <sys/types.h>
-#include <sys/xattr.h>
 #include <byteswap.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#ifdef BIONIC
+#include <sys/syscall.h>
+
+static ssize_t fgetxattr (int __fd, const char *__name, void *__value,
+			  size_t __size)
+{
+	return syscall(__NR_fgetxattr, __fd, __name, __value, __size);
+}
+
+static ssize_t getxattr (const char *__path, const char *__name,
+			 void *__value, size_t __size)
+{
+	return syscall(__NR_getxattr, __path, __name, __value, __size);
+}
+
+static int fremovexattr (int __fd, const char *__name)
+{
+	return syscall(__NR_fremovexattr, __fd, __name);
+}
+
+static int fsetxattr (int __fd, const char *__name, const void *__value,
+		      size_t __size, int __flags)
+{
+	return syscall(__NR_fsetxattr, __fd, __name, __value, __size, __flags);
+}
+
+static int removexattr (const char *__path, const char *__name)
+{
+	return syscall(__NR_removexattr, __path, __name);
+}
+
+static int setxattr (const char *__path, const char *__name,
+		     const void *__value, size_t __size, int __flags)
+{
+	return syscall(__NR_setxattr, __path, __name, __value, __size, __flags);
+}
+
+#else
+#include <sys/xattr.h>
+#endif
 
 #define XATTR_SECURITY_PREFIX "security."
 
