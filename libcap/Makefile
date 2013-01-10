@@ -16,7 +16,8 @@ FILES=cap_alloc cap_proc cap_extint cap_flag cap_text
 # no support).
 ifeq ($(LIBATTR),yes)
 FILES += cap_file
-LDFLAGS += -lattr
+#FIXME: do that dynamically
+#LDFLAGS += -lattr
 endif
 
 INCLS=libcap.h cap_names.h $(INCS)
